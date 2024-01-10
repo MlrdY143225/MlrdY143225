@@ -1,0 +1,14 @@
+- hosts: Webserver
+  become: true
+  tasks: 
+  - name: update apt-get repo
+    command: sudo apt-get update
+  - name: Install git, maven and  dockers
+    package: name={{item}} state=present
+    loop: 
+     - git
+     - maven
+  - name: clone the code on the worker nodes from github
+    git: repo=https://github.com/MlrdY143225/MlrdY143225.git dest=/tmp/mycode
+  - name: Execute mevan command to build the code
+    command: chdir=/tmp/mycode mvn package 
